@@ -8,13 +8,22 @@ namespace Enigmatic.Core
     public static class EnigmaticStyles
     {
         public static bool IsDark => EditorGUIUtility.isProSkin;
-        private static StyleContaner m_Style;
+        private static StyleContainer m_Style;
 
         [InitializeOnLoadMethod]
         public static void Register()
         {
             string path = EnigmaticData.GetUnityPath($"{EnigmaticData.sourceEditor}/Enigmatic.asset");
-            m_Style = EnigmaticData.LoadAssetAtPath<StyleContaner>(path);
+            m_Style = EnigmaticData.LoadAssetAtPath<StyleContainer>(path);
+
+            Debug.Log(m_Style);
+
+            if (m_Style == null)
+            {
+                m_Style = ScriptableObject.CreateInstance<StyleContainer>();
+                m_Style.Construct();
+            }
+
             m_Style.ReginsterGUIStyles();
         }
 
@@ -160,9 +169,9 @@ namespace Enigmatic.Core
             }
         }
 
-        public static GUIStyle columBackground => m_Style.GetGUIStyle(IsDark, "ColumBackground");
+        public static GUIStyle columnBackground => m_Style.GetGUIStyle(IsDark, "ColumnBackground");
 
-        public static GUIStyle columBackgroundSelected => m_Style.GetGUIStyle(IsDark, "ColumBackgroundSelected");
+        public static GUIStyle columnBackgroundSelected => m_Style.GetGUIStyle(IsDark, "ColumnBackgroundSelected");
 
         public static GUIStyle toolbarButton
         { 
@@ -181,7 +190,7 @@ namespace Enigmatic.Core
             }
         }
 
-        public static GUIStyle elementMoveIcon => m_Style.GetGUIStyle(IsDark, "ElementMoveIcon");
+        public static GUIStyle elementMoveIcon => m_Style.GetGUIStyle(IsDark, "ElementMoveIcon");//
 
         public static Color DarkThemeBlue => sm_DarkThemeBlue;
         public static Color AltDarkThemeBlue => sm_AltDarkThemeBlue;

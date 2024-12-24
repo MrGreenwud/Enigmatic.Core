@@ -11,10 +11,11 @@ namespace Enigmatic.Core
     public static class EnigmaticData
     {
         public static readonly string main = $"Enigmatic";
+        public static readonly string core = $"{main}/Core";
 
         public static readonly string resources = $"Resources/Enigmatic";
         public static readonly string resourcesEditor = $"{resources}/Editor"; //Editor
-        public static readonly string source = $"{main}/Source";
+        public static readonly string source = $"{core}/Source";
 
         public static readonly string sourceEditor = $"{source}/Editor";//Editor
 

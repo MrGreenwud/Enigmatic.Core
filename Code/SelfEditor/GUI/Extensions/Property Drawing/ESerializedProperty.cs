@@ -1,13 +1,12 @@
 #if UNITY_EDITOR
 
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
-using System.Linq;
-using ENIX;
 
 namespace Enigmatic.Core.Editor
 {
@@ -81,7 +80,7 @@ namespace Enigmatic.Core.Editor
         private void InitType()
         {
             IsClass = Type.IsClass && Type != typeof(string) && IsGenericType == false && IsArray == false;
-            IsStruct = Type.IsStruct();
+            IsStruct = Type.IsValueType && !Type.IsPrimitive && !Type.IsEnum;
             IsGenericType = Type.IsGenericType;
             IsList = Type.IsGenericType && Type.GetGenericTypeDefinition() == typeof(List<>);
             IsArray = Type.IsArray;

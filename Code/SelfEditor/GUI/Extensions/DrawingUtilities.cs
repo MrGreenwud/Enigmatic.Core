@@ -53,7 +53,7 @@ namespace Enigmatic.Core.Editor
 
         public static void BeginColum(float width, float height, float elementSpacing = 0, params EnigmaticGUILayoutOption[] options)
         {
-            EnigmaticGUILayout.BeginVertical(EnigmaticStyles.columBackground, EnigmaticGUILayout.Width(width),
+            EnigmaticGUILayout.BeginVertical(EnigmaticStyles.columnBackground, EnigmaticGUILayout.Width(width),
                 EnigmaticGUILayout.Height(height), EnigmaticGUILayout.Padding(0), EnigmaticGUILayout.ElementSpacing(elementSpacing));
 
             EnigmaticGUILayout.GetActiveGrup().ApplyOptions(options);

@@ -8,8 +8,8 @@ namespace Enigmatic.Core.Editor.Style
 {
     internal class StyleEditorWindow : EnigmaticWindow
     {
-        private List<StyleContaner> m_Contaners = new List<StyleContaner>();
-        private StyleContaner m_SelectedContaner;
+        private List<StyleContainer> m_Contaners = new List<StyleContainer>();
+        private StyleContainer m_SelectedContaner;
         private GUIStyle m_SelectedStyleElement;
 
         private bool m_IsExpandedNoramlState;
@@ -25,8 +25,8 @@ namespace Enigmatic.Core.Editor.Style
 
         private bool isDark;
 
-        private Dictionary<StyleContaner, string> m_SaveFilePath;
-        private ObjectPicker<StyleContaner> m_ObjectPicker;
+        private Dictionary<StyleContainer, string> m_SaveFilePath;
+        private ObjectPicker<StyleContainer> m_ObjectPicker;
 
         private float ListColumnWidth => 150;
         private float PropertyColumnWidth => 500;
@@ -55,8 +55,8 @@ namespace Enigmatic.Core.Editor.Style
 
             m_Contaners.Clear();
 
-            m_SaveFilePath = new Dictionary<StyleContaner, string>();
-            m_ObjectPicker = new ObjectPicker<StyleContaner>();
+            m_SaveFilePath = new Dictionary<StyleContainer, string>();
+            m_ObjectPicker = new ObjectPicker<StyleContainer>();
 
             m_ObjectPicker.OnPick += LoadStyleContaner;
         }
@@ -82,7 +82,7 @@ namespace Enigmatic.Core.Editor.Style
                 //Style List
                 DrawingUtilities.BeginColum(ListColumnWidth, ColumHeight, -1);
                 {
-                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columBackground, 
+                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columnBackground, 
                         "Styles", ListColumnWidth, true, 50, AddStyle, RemoveStyle);
 
                     DrawStyles();
@@ -92,7 +92,7 @@ namespace Enigmatic.Core.Editor.Style
                 //Element List
                 DrawingUtilities.BeginColum(ListColumnWidth, ColumHeight, -1);
                 {
-                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columBackground,
+                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columnBackground,
                         "Style Elements", ListColumnWidth, true, 0, AddStyleElement, RemoveStyleElement);
 
                     DrawStyleElements();
@@ -115,7 +115,7 @@ namespace Enigmatic.Core.Editor.Style
                         }
                     };
 
-                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columBackground, "Settings", PropertyColumnWidth, 
+                    DrawingUtilities.ColumnTitle(EnigmaticStyles.columnBackground, "Settings", PropertyColumnWidth, 
                         false, 0, null, null, drawStyleType);
 
                     DrawSettings();
@@ -127,17 +127,17 @@ namespace Enigmatic.Core.Editor.Style
 
         private void DrawStyles()
         {
-            foreach(StyleContaner contaner in m_Contaners)
+            foreach(StyleContainer contaner in m_Contaners)
                 DrawStyle(contaner);
         }
 
-        private void DrawStyle(StyleContaner contaner)
+        private void DrawStyle(StyleContainer contaner)
         {
             float width = EnigmaticGUILayout.GetActiveGrup().GetFreeArea().x;
             Vector2 size = new Vector2(width, 20);
 
             GUIStyle style = EnigmaticGUIUtility.GetHasSelected(m_SelectedContaner == contaner,
-                EnigmaticStyles.columBackground, EnigmaticStyles.columBackgroundSelected);
+                EnigmaticStyles.columnBackground, EnigmaticStyles.columnBackgroundSelected);
 
             if (EnigmaticGUILayout.Button(contaner.Tag, size, style))
             {
@@ -160,7 +160,7 @@ namespace Enigmatic.Core.Editor.Style
             Vector2 size = new Vector2(width, 20);
 
             GUIStyle style = EnigmaticGUIUtility.GetHasSelected(m_SelectedStyleElement == gUIStyle,
-                EnigmaticStyles.columBackground, EnigmaticStyles.columBackgroundSelected);
+                EnigmaticStyles.columnBackground, EnigmaticStyles.columnBackgroundSelected);
 
             if (EnigmaticGUILayout.Button(gUIStyle.name, size, style))
             {
@@ -201,7 +201,7 @@ namespace Enigmatic.Core.Editor.Style
 
                 EnigmaticGUILayout.Space(3);
 
-                EnigmaticGUILayout.Image(new Vector2(PropertyColumnWidth - 6, 0), EnigmaticStyles.columBackground);
+                EnigmaticGUILayout.Image(new Vector2(PropertyColumnWidth - 6, 0), EnigmaticStyles.columnBackground);
             }
             EnigmaticGUILayout.EndVertical();
         }
@@ -255,7 +255,7 @@ namespace Enigmatic.Core.Editor.Style
             {
                 m_SaveFilePath.Clear();
 
-                foreach (StyleContaner contaner in m_Contaners)
+                foreach (StyleContainer contaner in m_Contaners)
                 {
                     string path = AssetDatabase.GetAssetPath(contaner);
 
@@ -280,7 +280,7 @@ namespace Enigmatic.Core.Editor.Style
             menu.DropDown(rect);
         }
 
-        private void LoadStyleContaner(StyleContaner contaner)
+        private void LoadStyleContaner(StyleContainer contaner)
         {
             if (m_Contaners.Contains(contaner))
                 return;
@@ -358,7 +358,7 @@ namespace Enigmatic.Core.Editor.Style
 
         private void AddStyle()
         {
-            StyleContaner contaner = CreateInstance<StyleContaner>();
+            StyleContainer contaner = CreateInstance<StyleContainer>();
             contaner.Tag = "New Style";
             contaner.Construct();
 

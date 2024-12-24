@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Enigmatic.Core.Editor.Style
 {
-    public class StyleContaner : ScriptableObject
+    public class StyleContainer : ScriptableObject
     {
         public string Tag;
 
