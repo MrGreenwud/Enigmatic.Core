@@ -58,7 +58,7 @@ namespace Enigmatic.Core.Editor
 
         public static void Repaint()
         {
-            EditorWindow.focusedWindow.Repaint();
+            EditorWindow.focusedWindow?.Repaint();
         }
     }
 }

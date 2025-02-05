@@ -16,8 +16,6 @@ namespace Enigmatic.Core
             string path = EnigmaticData.GetUnityPath($"{EnigmaticData.sourceEditor}/Enigmatic.asset");
             m_Style = EnigmaticData.LoadAssetAtPath<StyleContainer>(path);
 
-            Debug.Log(m_Style);
-
             if (m_Style == null)
             {
                 m_Style = ScriptableObject.CreateInstance<StyleContainer>();
@@ -73,6 +71,7 @@ namespace Enigmatic.Core
         private static GUIStyle sm_TreeHierarchyEnd;
 
         public static Color DarkThemeBlueElementSelected = new Color(0.19295f, 0.37995f, 0.5865f, 0.85f);
+        public static Color AltDarkThemeBlueElementSelected = new Color(0.2f, 0.34117f, 0.85098f, 1f);
 
         #endregion
 
@@ -173,6 +172,8 @@ namespace Enigmatic.Core
 
         public static GUIStyle columnBackgroundSelected => m_Style.GetGUIStyle(IsDark, "ColumnBackgroundSelected");
 
+        public static GUIStyle columnBackgroundHover => m_Style.GetGUIStyle(IsDark, "ColumnBackgroundHover");
+
         public static GUIStyle toolbarButton
         { 
             get
@@ -190,7 +191,7 @@ namespace Enigmatic.Core
             }
         }
 
-        public static GUIStyle elementMoveIcon => m_Style.GetGUIStyle(IsDark, "ElementMoveIcon");//
+        public static GUIStyle elementMoveIcon => m_Style.GetGUIStyle(IsDark, "ElementMoveIcon");
 
         public static Color DarkThemeBlue => sm_DarkThemeBlue;
         public static Color AltDarkThemeBlue => sm_AltDarkThemeBlue;

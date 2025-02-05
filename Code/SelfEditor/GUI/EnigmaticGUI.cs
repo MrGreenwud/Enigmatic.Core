@@ -14,71 +14,6 @@ namespace Enigmatic.Core.Editor
 
         public static Rect ZoomedArea { get; private set; }
 
-        public static bool Button(string text, Vector2 position, params GUILayoutOption[] gUILayoutOptions)
-        {
-            bool result;
-
-            GUILayout.BeginArea(new Rect(position.x, position.y, 100, 100));
-            result = GUILayout.Button(text, gUILayoutOptions);
-            GUILayout.EndArea();
-
-            return result;
-        } // Check
-
-        public static void Image(Vector2 size, string text, GUIStyle style)
-        {
-            GUILayout.BeginHorizontal();
-            {
-                float offset = size.y / 2;
-
-                GUILayout.Space(offset);
-
-                GUILayout.BeginVertical();
-                {
-                    GUILayout.Space(offset);
-
-                    GUILayout.Box(text, EnigmaticStyles.Port,
-                        GUILayout.Width(size.x), GUILayout.Height(size.y));
-                }
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndHorizontal();
-        } //Delete
-
-        public static void sLabel(string text, GUIStyle style = null, float s = 0)
-        {
-            if (style == null)
-                style = new GUIStyle(GUI.skin.label);
-
-            float width = EnigmaticGUILayout.CalculateSize(text).x;
-            GUILayout.Label(text, style, GUILayout.MinWidth(width));
-        }  //Delete
-
-        public static void PropertyField(UnityEditor.SerializedProperty property, float fieldWidth)
-        {
-            if (property.isArray)
-            {
-                EditorGUILayout.PropertyField(property, new GUIContent(property.displayName), GUILayout.MinWidth(30));
-                return;
-            }
-
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.BeginHorizontal(GUILayout.Width(fieldWidth / 2), GUILayout.MaxWidth(fieldWidth / 2));
-                {
-                    sLabel(property.displayName);
-                }
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal(GUILayout.Width(fieldWidth / 2), GUILayout.MaxWidth(fieldWidth / 2), GUILayout.MinWidth(30));
-                {
-                    EditorGUILayout.PropertyField(property, GUIContent.none, GUILayout.MinWidth(60));
-                }
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndHorizontal();
-        } //Delete
-
         public static void PropertyField(Vector2 position, SerializedProperty property, float fieldWidth, string fieldName = "")
         {
             float height = EditorGUI.GetPropertyHeight(property, true);
@@ -172,11 +107,7 @@ namespace Enigmatic.Core.Editor
 
             Image(rectBackground, background);
             Image(rectFoldout, foldout);
-            //Label(displayName, )
-
-            //result = EditorGUI.Foldout(rect, isExpanded, displayName);
-            //UpdateLastGUIRect(rect);
-
+            
             return result;
         }
 
@@ -206,17 +137,9 @@ namespace Enigmatic.Core.Editor
             }
 
             GUI.Box(rect, text, styleToUse);
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
-
-            //EnigmaticGUIUtility.Repaint();
 
             return EnigmaticGUIUtility.OnClick(rect, 0);
         }
-
-        public static bool Button(string text, float x, float y, params GUILayoutOption[] gUILayoutOptions)
-        {
-            return Button(text, new Vector2(x, y), gUILayoutOptions);
-        } // Delete
 
         public static void BeginZoomedElement()
         {
@@ -278,15 +201,13 @@ namespace Enigmatic.Core.Editor
 
         public static float FloatField(string name, float value, Vector2 position, float widthFieldArea)
         {
-            Vector2 lableSize = new Vector2(widthFieldArea / 2, 18f);
-            GUI.Label(new Rect(position, lableSize), name);
+            Vector2 labelSize = new Vector2(widthFieldArea / 2, 18f);
+            GUI.Label(new Rect(position, labelSize), name);
 
             Vector2 fieldPosition = position + Vector2.right * (widthFieldArea / 2);
             Vector2 fieldSize = new Vector2(widthFieldArea / 2, 18f);
             float result = EditorGUI.FloatField(new Rect(fieldPosition, fieldSize), value);
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
-
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
 
             return result;
         }
@@ -297,22 +218,18 @@ namespace Enigmatic.Core.Editor
             float result = EditorGUI.FloatField(new Rect(position, fieldSize), value);
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
 
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
-
             return result;
         }
 
         public static int IntField(string name, int value, Vector2 position, float widthFieldArea)
         {
-            Vector2 lableSize = new Vector2(widthFieldArea / 2, 18f);
-            GUI.Label(new Rect(position, lableSize), name);
+            Vector2 labelSize = new Vector2(widthFieldArea / 2, 18f);
+            GUI.Label(new Rect(position, labelSize), name);
 
             Vector2 fieldPosition = position + Vector2.right * (widthFieldArea / 2);
             Vector2 fieldSize = new Vector2(widthFieldArea / 2, 18f);
             int result = EditorGUI.IntField(new Rect(fieldPosition, fieldSize), value);
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
-
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
 
             return result;
         }
@@ -338,8 +255,6 @@ namespace Enigmatic.Core.Editor
             string result = EditorGUI.TextField(new Rect(fieldPosition, fieldSize), value);
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
 
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
-
             return result;
         }
 
@@ -348,8 +263,6 @@ namespace Enigmatic.Core.Editor
             Vector2 fieldSize = new Vector2(widthFieldArea, 18f);
             string result = EditorGUI.TextField(new Rect(position, fieldSize), value);
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
-
-            EditorGUIUtility.GetControlID((int)(position.x + position.y), FocusType.Passive);
 
             return result;
         }
@@ -371,11 +284,10 @@ namespace Enigmatic.Core.Editor
             UpdateLastGUIRect(new Rect(position, new Vector2(widthFieldArea, 18f)));
 
             return values[result];
-        } //Make varialtin without name arg. 
+        } //Make variation without name arg. 
 
         public static bool Foldout(string name, bool foldDown, Vector2 position, float widthFieldArea)
         {
-            float newWidthFieldArea = widthFieldArea - (18f + 6f);
             bool resultFoldDown = foldDown;
 
             if (resultFoldDown == false)
@@ -386,8 +298,8 @@ namespace Enigmatic.Core.Editor
             if (EnigmaticGUIUtility.OnClick(new Rect(position, new Vector2(widthFieldArea, 18)), 0))
                 resultFoldDown = !resultFoldDown;
 
-            Vector2 lablePostion = position + Vector2.right * (18f);
-            Label(name, lablePostion);
+            Vector2 labelPosition = position + Vector2.right * 18f;
+            Label(name, labelPosition);
 
             return resultFoldDown;
         }
@@ -402,10 +314,10 @@ namespace Enigmatic.Core.Editor
             else
                 Image(new Rect(position, Vector2.one * 18f), EnigmaticStyles.foldoutButtonOpen);
 
-            Vector2 lablePostion = position + Vector2.right * 18f;
-            Label(name, lablePostion);
+            Vector2 labelPosition = position + Vector2.right * 18f;
+            Label(name, labelPosition);
 
-            Vector2 fieldPosition = lablePostion + Vector2.right * (newWidthFieldArea / 2);
+            Vector2 fieldPosition = labelPosition + Vector2.right * (newWidthFieldArea / 2);
             Vector2 fieldSize = new Vector2(newWidthFieldArea / 4, 18f);
             outCount = EditorGUI.IntField(new Rect(fieldPosition, fieldSize), count);
 
@@ -502,17 +414,17 @@ namespace Enigmatic.Core.Editor
             property.ApplyValue();
         }
 
-        public static void DrawProperties(ESerializedProperty[] propertes, float widthFieldArea)
+        public static void DrawProperties(ESerializedProperty[] properties, float widthFieldArea)
         {
             Vector2 lastRectPosition = GetLastGUIRect().position;
 
-            foreach (ESerializedProperty property in propertes)
+            foreach (ESerializedProperty property in properties)
             {
                 Vector2 position = new Vector2(lastRectPosition.x, GetLastGUIRect().position.y + 24);
                 PropertyField(property, position, widthFieldArea);
                 property.ApplyValue();
             }
-        }
+        } // Check
 
         public static void DrawProperty(SerializedProperty property, bool drawChildren)
         {
@@ -627,11 +539,11 @@ namespace Enigmatic.Core.Editor
             return GetFixedBox(rect, new RectOffset(border, border, border, border));
         }
 
-        public static ProfilerMarker CalcualteFixedBox = new ProfilerMarker(ProfilerCategory.Render, "CalcualteFixedBox");
+        public static ProfilerMarker CalculateFixedBox = new ProfilerMarker(ProfilerCategory.Render, "CalculateFixedBox");
 
         public static Rect GetFixedBox(Rect rect, GUIStyle style)
         {
-            CalcualteFixedBox.Begin();
+            CalculateFixedBox.Begin();
 
             int left = style.border.left - style.padding.left;
             int right = style.border.right - style.padding.right;
@@ -640,21 +552,21 @@ namespace Enigmatic.Core.Editor
 
             RectOffset offset = new RectOffset(left, right, top, bottom);
 
-            CalcualteFixedBox.End();
+            CalculateFixedBox.End();
 
             return GetFixedBox(rect, offset);
         }
 
         public static Rect GetFixedBox(Rect rect, RectOffset offset)
         {
-            CalcualteFixedBox.Begin();
+            CalculateFixedBox.Begin();
 
             Vector2 position = new Vector2(rect.x - offset.left, rect.y - offset.top);
 
             Vector2 size = new Vector2(rect.width + (offset.right + offset.left),
                 rect.height + (offset.bottom + offset.top));
 
-            CalcualteFixedBox.End();
+            CalculateFixedBox.End();
 
             return new Rect(position, size);
         }

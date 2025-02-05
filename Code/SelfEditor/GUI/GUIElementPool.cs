@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Enigmatic.Core.Editor
 {
-    public class GUIElementPool
+    internal class GUIElementPool
     {
         private Queue<GUIElement> m_ElementsPool = new Queue<GUIElement>();
 

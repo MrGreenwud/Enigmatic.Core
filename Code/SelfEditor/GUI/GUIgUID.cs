@@ -21,9 +21,9 @@ namespace Enigmatic.Core.Editor
             return guid;
         }
 
-        public static int Next(string guidControllName, Rect rect, object value)
+        public static int Next(string guidControlName, Rect rect, object value)
         {
-            string combinedInput = $"{guidControllName}_{rect.x}_{rect.y}_{rect.width}_{rect.height}_{value}";
+            string combinedInput = $"{guidControlName}_{rect.x}_{rect.y}_{rect.width}_{rect.height}_{value}";
             return combinedInput.GetHashCode();
         }
     }

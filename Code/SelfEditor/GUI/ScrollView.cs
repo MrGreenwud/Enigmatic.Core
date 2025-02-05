@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Enigmatic.Core.Editor
 {
-    public class ScrollView : GUIGrup
+    public class ScrollView : GUIGroup
     {
         public Rect ViewRect { get; private set; }
         public Vector2 ScrollPosition { get; private set; }
@@ -18,7 +18,7 @@ namespace Enigmatic.Core.Editor
 
         public ScrollView(Rect rect, Rect viewRect, Vector2 scrollPosition, bool alwaysShowHorizontal,
             bool alwaysShowVertical, GUIStyle horizontalScrollbar, GUIStyle verticalScrollbar,
-            GUIStyle background, GrupSortType sortType)
+            GUIStyle background, GroupSortType sortType)
             : base(rect, sortType)
         {
             Rect.position = Vector2.zero;

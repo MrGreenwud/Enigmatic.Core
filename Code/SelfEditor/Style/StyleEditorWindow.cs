@@ -61,9 +61,9 @@ namespace Enigmatic.Core.Editor.Style
             m_ObjectPicker.OnPick += LoadStyleContaner;
         }
 
-        protected override void Draw()
+        protected override void OnDraw()
         {
-            base.Draw();
+            base.OnDraw();
 
             m_ObjectPicker.Update();
 
@@ -133,7 +133,7 @@ namespace Enigmatic.Core.Editor.Style
 
         private void DrawStyle(StyleContainer contaner)
         {
-            float width = EnigmaticGUILayout.GetActiveGrup().GetFreeArea().x;
+            float width = EnigmaticGUILayout.GetActiveGroup().GetFreeArea().x;
             Vector2 size = new Vector2(width, 20);
 
             GUIStyle style = EnigmaticGUIUtility.GetHasSelected(m_SelectedContaner == contaner,
@@ -156,7 +156,7 @@ namespace Enigmatic.Core.Editor.Style
 
         private void DrawStyleElement(GUIStyle gUIStyle)
         {
-            float width = EnigmaticGUILayout.GetActiveGrup().GetFreeArea().x;
+            float width = EnigmaticGUILayout.GetActiveGroup().GetFreeArea().x;
             Vector2 size = new Vector2(width, 20);
 
             GUIStyle style = EnigmaticGUIUtility.GetHasSelected(m_SelectedStyleElement == gUIStyle,
@@ -211,8 +211,8 @@ namespace Enigmatic.Core.Editor.Style
             if (m_SelectedStyleElement == null)
                 return;
 
-            Rect rect = EnigmaticGUILayout.GetActiveGrup().GetNext();
-            rect.size = EnigmaticGUILayout.GetActiveGrup().GetFreeArea();
+            Rect rect = EnigmaticGUILayout.GetActiveGroup().GetNext();
+            rect.size = EnigmaticGUILayout.GetActiveGroup().GetFreeArea();
             rect.height = ColumHeight - rect.height - 10;
 
             EnigmaticGUILayout.BeginVerticalScrollView(rect, rect, m_SettingsScrollPosition,
@@ -305,12 +305,12 @@ namespace Enigmatic.Core.Editor.Style
 
         private void DrawRectOffset(RectOffset rectOffset, string name)
         {
-            Vector2 freeArea = EnigmaticGUILayout.GetActiveGrup().GetFreeArea();
+            Vector2 freeArea = EnigmaticGUILayout.GetActiveGroup().GetFreeArea();
 
             EnigmaticGUILayout.BeginHorizontal(EnigmaticGUILayout.Width(freeArea.x),
                 EnigmaticGUILayout.ExpandWidth(true), EnigmaticGUILayout.ExpandHeight(true));
             {
-                EnigmaticGUILayout.Lable(name, 120);
+                EnigmaticGUILayout.Label(name, 120);
 
                 EnigmaticGUILayout.BeginHorizontal(EnigmaticGUILayout.Width(freeArea.x - 120), 
                     EnigmaticGUILayout.ExpandWidth(true), EnigmaticGUILayout.ExpandHeight(true));

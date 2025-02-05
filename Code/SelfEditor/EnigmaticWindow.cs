@@ -8,6 +8,7 @@ namespace Enigmatic.Core.Editor
     public class EnigmaticWindow : EditorWindow
     {
         protected bool IsInit { get; private set; }
+        protected Rect Rect { get; private set; }
 
         private Vector2 m_Size;
 
@@ -42,7 +43,8 @@ namespace Enigmatic.Core.Editor
                 EnigmaticGUILayout.Height(position.height), EnigmaticGUILayout.ElementSpacing(0), 
                 EnigmaticGUILayout.Padding(0));
             {
-                Draw();
+                Rect = EnigmaticGUILayout.GetActiveGroup().Rect;
+                OnDraw();
             }
             EnigmaticGUILayout.EndVertical();
         }
@@ -51,7 +53,7 @@ namespace Enigmatic.Core.Editor
 
         protected virtual void OnClose() { }
 
-        protected virtual void Draw() { }
+        protected virtual void OnDraw() { }
 
         protected virtual void OnResize() { }
     }

@@ -32,6 +32,7 @@ namespace Enigmatic.Core
         public static readonly string inputStorege = $"{resources}/KFInput";
 
         public static readonly string inputEditorSettings = $"{inputStorege}/EditorInputSettings.asset";
+        public static readonly string inputEditorSettings2 = $"{inputStorege}/EditorInputSettings.enix";
         public static readonly string inputSettings = $"{inputStorege}/InputSettings.asset";
 
         public static readonly string inputProviders = $"{inputStorege}/Providers";
@@ -54,28 +55,28 @@ namespace Enigmatic.Core
         
         public static string GetUniformPath(string path)
         {
-            Queue<string> elments = path.Split('/').ToQueue();
-            string resulPath = string.Empty;
+            Queue<string> elements = path.Split('/').ToQueue();
+            string resultPath = string.Empty;
 
             bool isFindRootFolder = false;
 
-            while(elments.Count > 0)
+            while(elements.Count > 0)
             {
                 if (isFindRootFolder)
                 {
-                    resulPath += $"{elments.Dequeue()}";
+                    resultPath += $"{elements.Dequeue()}";
 
-                    if (elments.Count > 0)
-                        resulPath += "/";
+                    if (elements.Count > 0)
+                        resultPath += "/";
                 }
-                else if (elments.Dequeue() == "Assets"
-                    && elments.Contains("Assets") == false)
+                else if (elements.Dequeue() == "Assets"
+                    && elements.Contains("Assets") == false)
                 {
                     isFindRootFolder = true;
                 }
             }
 
-            return resulPath;
+            return resultPath;
         }
 
         public static string GetPath(params string[] paths)

@@ -2,7 +2,7 @@
 
 namespace Enigmatic.Core
 {
-    public enum GrupSortType
+    public enum GroupSortType
     {
         None,
         Vertical,

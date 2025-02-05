@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Enigmatic.Core
 {
-    public class PostActionCallerQueue
+    public class DeferredActionCallerQueue
     {
-        private Queue<PostActionCaller> m_CallQueue = new Queue<PostActionCaller>();
+        private Queue<DeferredActionCaller> m_CallQueue = new Queue<DeferredActionCaller>();
 
         public void Enqueue(Action<object[]> action, params object[] parameters)
         {
-            PostActionCaller caller = PostActionCallerPool.GetCaller(action, parameters);
+            DeferredActionCaller caller = PostActionCallerPool.GetCaller(action, parameters);
             m_CallQueue.Enqueue(caller);
         }
 
-        public void Enqueue(PostActionCaller caller)
+        public void Enqueue(DeferredActionCaller caller)
         {
             m_CallQueue.Enqueue(caller);
         }
@@ -22,7 +22,7 @@ namespace Enigmatic.Core
         {
             while (m_CallQueue.Count > 0)
             {
-                PostActionCaller caller = m_CallQueue.Dequeue();
+                DeferredActionCaller caller = m_CallQueue.Dequeue();
                 caller.Call();
 
                 PostActionCallerPool.ReturnCaller(caller);

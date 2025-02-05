@@ -2,7 +2,7 @@ using System;
 
 namespace Enigmatic.Core
 {
-    public class PostActionCaller
+    public class DeferredActionCaller
     {
         protected object[] Parameters { get; private set; }
         private Action<object[]> m_Action;

@@ -9,11 +9,11 @@ using Unity.Profiling;
 
 namespace Enigmatic.Core.Editor
 {
-    public class GUIGrup : GUIElement
+    public class GUIGroup : GUIElement
     {
-        public static ProfilerMarker CalculateGrupSize = new ProfilerMarker(ProfilerCategory.Render, "CalculateGrupSize");
+        public static ProfilerMarker CalculateGroupSize = new ProfilerMarker(ProfilerCategory.Render, "CalculateGroupSize");
 
-        public GrupSortType SortType = GrupSortType.None;
+        public GroupSortType SortType = GroupSortType.None;
         public float ElementSpacing = 3;
         public float Pudding = 3;
         public bool isCliped;
@@ -21,35 +21,27 @@ namespace Enigmatic.Core.Editor
         public bool IsExpandWidth = false;
         public bool IsExpandHeight = false;
 
-        public bool IsClicable = false;
+        public bool IsClickable = false;
 
         public GUIStyle Style = GUIStyle.none;
+        public Color Color = Color.clear;
 
-        private GUIGrup m_ParentGrup;
+        private GUIGroup m_ParentGroup;
         private List<GUIElement> m_GUIElements = new List<GUIElement>();
 
         public int GUIElementsCount => m_GUIElements.Count;
-        public GUIGrup ParentGrup => m_ParentGrup;
+        public GUIGroup ParentGroup => m_ParentGroup;
 
-        public GUIGrup(Rect rect, float pudding = 3, GrupSortType sortType = GrupSortType.None,
-            bool isExpandedWidth = false, bool isExpandedHeight = false,
-            float elementSpacing = 3) : base(rect)
-        {
-            SortType = sortType;
-            ElementSpacing = elementSpacing;
-            Pudding = pudding;
-            IsExpandWidth = isExpandedWidth;
-            IsExpandHeight = isExpandedHeight;
-        } //Delete
-
-        public GUIGrup(Rect rect, GrupSortType sortType) : base(rect)
+        public GUIGroup(Rect rect, GroupSortType sortType) : base(rect)
         {
             SortType = sortType;
         }
 
-        public void Init(Rect rect, GrupSortType sortType)
+        public void Init(Rect rect, GroupSortType sortType)
         {
             base.Init(rect);
+            Style = GUIStyle.none;
+            Color = Color.clear;
             SortType = sortType;
             isCliped = false;
         }
@@ -79,33 +71,33 @@ namespace Enigmatic.Core.Editor
                         Rect.height = (float)option.Value;
                         break;
                     case EnigmaticGUILayoutOption.TypeOption.SetClickable:
-                        IsClicable = (bool)option.Value;
+                        IsClickable = (bool)option.Value;
                         break;
                 }
             }
         }
 
-        public void SetParentGrup(GUIGrup parent)
+        public void SetParentGroup(GUIGroup parent)
         {
-            if (m_ParentGrup != null)
+            if (m_ParentGroup != null)
                 return;
 
-            m_ParentGrup = parent;
+            m_ParentGroup = parent;
         }
 
         public void AddElement(GUIElement element)
         {
-            CalculateGrupSize.Begin();
+            CalculateGroupSize.Begin();
 
             if (m_GUIElements.Contains(element))
                 throw new Exception();
 
             m_GUIElements.Add(element);
 
-            if (element is GUIGrup grup)
-                grup.SetParentGrup(this);
+            if (element is GUIGroup Group)
+                Group.SetParentGroup(this);
 
-            CalculateGrupSize.End();
+            CalculateGroupSize.End();
         }
 
         public virtual Rect GetNext()
@@ -117,29 +109,29 @@ namespace Enigmatic.Core.Editor
                         Rect.size - Vector2.one * (Pudding * 2));
             }
 
-            return GetNextPostion();
+            return GetNextPosition();
         }
 
-        public Rect GetNextPostion()
+        public Rect GetNextPosition()
         {
-            CalculateGrupSize.Begin();
+            CalculateGroupSize.Begin();
 
             GUIElement element = m_GUIElements.Last();
 
             Rect rect = new Rect();
 
-            if (SortType == GrupSortType.Horizontal)
+            if (SortType == GroupSortType.Horizontal)
             {
                 rect.x = element.Rect.x + element.Rect.width + ElementSpacing;
                 rect.y = Rect.y + Pudding;
             }
-            else if (SortType == GrupSortType.Vertical)
+            else if (SortType == GroupSortType.Vertical)
             {
                 rect.x = Rect.x + Pudding;
                 rect.y = element.Rect.y + element.Rect.height + ElementSpacing;
             }
 
-            CalculateGrupSize.End();
+            CalculateGroupSize.End();
 
             return rect;
         }
@@ -151,12 +143,12 @@ namespace Enigmatic.Core.Editor
 
             if (m_GUIElements.Count > 0)
             {
-                if (SortType == GrupSortType.Horizontal)
+                if (SortType == GroupSortType.Horizontal)
                 {
                     x = Rect.width - Pudding * 2 - (m_GUIElements.Last().Rect.position
                         - Rect.position + Vector2.right * m_GUIElements.Last().Rect.width).x - ElementSpacing;
                 }
-                else if (SortType == GrupSortType.Vertical)
+                else if (SortType == GroupSortType.Vertical)
                 {
                     y = Rect.height - Pudding * 2 - (m_GUIElements.Last().Rect.position
                         - Rect.position + Vector2.up * m_GUIElements.Last().Rect.width).y - ElementSpacing;
@@ -168,7 +160,7 @@ namespace Enigmatic.Core.Editor
 
         public Rect GetUnClipedElement(Rect rect)
         {
-            List<Vector2> positions = GetHierarchyGrupPosition();
+            List<Vector2> positions = GetHierarchyGroupPosition();
             Rect result = new Rect(Vector2.zero, rect.size);
 
             foreach (Vector2 position in positions)
@@ -178,32 +170,32 @@ namespace Enigmatic.Core.Editor
             return result;
         }
 
-        public List<Vector2> GetHierarchyGrupPosition()
+        public List<Vector2> GetHierarchyGroupPosition()
         {
             List<Vector2> positions = new List<Vector2>();
 
             if (isCliped)
                 positions.Add(Rect.position);
 
-            if (m_ParentGrup != null)
-                positions.AddRange(m_ParentGrup.GetHierarchyGrupPosition());
+            if (m_ParentGroup != null)
+                positions.AddRange(m_ParentGroup.GetHierarchyGroupPosition());
 
             return positions;
         }
 
-        public void ReconculateSize()
+        public void RecalculateSize()
         {
-            CalculateGrupSize.Begin();
+            CalculateGroupSize.Begin();
 
             foreach (GUIElement element in m_GUIElements)
-                ColculateSize(element);
+                CalculateSize(element);
 
-            CalculateGrupSize.End();
+            CalculateGroupSize.End();
         }
 
-        public void ColculateSize(GUIElement element)
+        public void CalculateSize(GUIElement element)
         {
-            CalculateGrupSize.Begin();
+            CalculateGroupSize.Begin();
 
             if (IsExpandHeight)
             {
@@ -229,7 +221,7 @@ namespace Enigmatic.Core.Editor
                 }
             }
 
-            CalculateGrupSize.End();
+            CalculateGroupSize.End();
         }
 
         public void BeginClip()

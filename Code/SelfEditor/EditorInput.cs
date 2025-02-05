@@ -13,6 +13,7 @@ namespace Enigmatic.Core.Editor
         public static Event Current { get; private set; }
         public static Event Last { get; private set; }
 
+        private static Vector2 sm_MousePosition;
         private static Vector2 sm_LastMousePosition;
 
         private static Dictionary<KeyCode, bool> sm_IsKeyPressed = new Dictionary<KeyCode, bool>();
@@ -25,31 +26,65 @@ namespace Enigmatic.Core.Editor
             Last = Current;
             Current = Event.current;
 
-            if (Current.type == EventType.KeyDown || Current.type == EventType.KeyUp
-                && Current.isKey)
+            sm_MousePosition = Current.mousePosition;
+
+            KeyCode keyCode = Current.keyCode;
+
+            if (GetButtonDown(keyCode))
             {
-                KeyCode keyCode = Current.keyCode;
+                if (sm_IsKeyPressed.ContainsKey(keyCode) == false)
+                    sm_IsKeyPressed.Add(keyCode, false);
 
-                if (GetButtonDown(keyCode))
+                sm_IsKeyPressed[keyCode] = true;
+            }
+            else if (GetButtonUp(keyCode)
+                && sm_IsKeyPressed.ContainsKey(keyCode))
+            {
+                sm_IsKeyPressed[keyCode] = false;
+            }
+
+            int button = Current.button;
+
+            if (GetMouseButtonDown(button))
+            {
+                if (button == 0)
                 {
-                    if (sm_IsKeyPressed.ContainsKey(keyCode) == false)
-                        sm_IsKeyPressed.Add(keyCode, false);
-
-                    sm_IsKeyPressed[keyCode] = true;
+                    if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse0) == false)
+                        sm_IsKeyPressed.Add(KeyCode.Mouse0, true);
+                    else
+                        sm_IsKeyPressed[KeyCode.Mouse0] = true;
                 }
-                else if (GetButtonUp(keyCode)
-                    && sm_IsKeyPressed.ContainsKey(keyCode))
+                else if (button == 1)
                 {
-                    sm_IsKeyPressed[keyCode] = false;
+                    if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse1) == false)
+                        sm_IsKeyPressed.Add(KeyCode.Mouse1, true);
+                    else
+                        sm_IsKeyPressed[KeyCode.Mouse1] = true;
                 }
             }
+            else if (GetMouseButtonUp(button))
+            {
+                if (button == 0)
+                {
+                    if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse0))
+                        sm_IsKeyPressed[KeyCode.Mouse0] = false;
+
+                }
+                else if (button == 1)
+                {
+                    if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse1))
+                        sm_IsKeyPressed[KeyCode.Mouse1] = false;
+                }
+            }
+
+
 
             EditorInputHandler.End();
         }
 
         public static Vector2 GetMousePosition()
         {
-            return Current.mousePosition;
+            return sm_MousePosition;
         }
 
         public static float GetMouseScrollWheel()
@@ -131,12 +166,15 @@ namespace Enigmatic.Core.Editor
         private static bool GetMouseLeftButtonPress()
         {
             if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse0) == false)
-                sm_IsKeyPressed.Add(KeyCode.Mouse0, false);
+                return false;
 
-            if (GetMouseButtonDown(0) && sm_IsKeyPressed[KeyCode.Mouse0] == false)
-                sm_IsKeyPressed[KeyCode.Mouse0] = true;
-            else if (GetMouseButtonUp(0))
-                sm_IsKeyPressed[KeyCode.Mouse0] = false;
+            //if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse0) == false)
+            //    sm_IsKeyPressed.Add(KeyCode.Mouse0, false);
+
+            //if (GetMouseButtonDown(0) && sm_IsKeyPressed[KeyCode.Mouse0] == false)
+            //    sm_IsKeyPressed[KeyCode.Mouse0] = true;
+            //else if (GetMouseButtonUp(0))
+            //    sm_IsKeyPressed[KeyCode.Mouse0] = false;
 
             return sm_IsKeyPressed[KeyCode.Mouse0];
         }
@@ -144,17 +182,15 @@ namespace Enigmatic.Core.Editor
         private static bool GetMouseRightButtonPress()
         {
             if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse1) == false)
-                sm_IsKeyPressed.Add(KeyCode.Mouse1, false);
-
-            if (GetMouseButtonDown(1))
-            {
-                sm_IsKeyPressed[KeyCode.Mouse1] = true;
-            }
-            else if (GetMouseButtonUp(1))
-            {
-                sm_IsKeyPressed.Remove(KeyCode.Mouse1);
                 return false;
-            }
+
+            //if (sm_IsKeyPressed.ContainsKey(KeyCode.Mouse1) == false)
+            //    sm_IsKeyPressed.Add(KeyCode.Mouse1, false);
+
+            //if (GetMouseButtonDown(1))
+            //    sm_IsKeyPressed[KeyCode.Mouse1] = true;
+            //else if (GetMouseButtonUp(1))
+            //    sm_IsKeyPressed[KeyCode.Mouse1] = false;
 
             return sm_IsKeyPressed[KeyCode.Mouse1];
         }

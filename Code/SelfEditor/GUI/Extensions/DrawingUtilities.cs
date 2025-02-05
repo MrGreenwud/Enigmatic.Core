@@ -20,7 +20,7 @@ namespace Enigmatic.Core.Editor
                 EnigmaticGUILayout.Height(22), EnigmaticGUILayout.Padding(0));
             {
                 EnigmaticGUILayout.Space(2);
-                EnigmaticGUILayout.Lable(title, titleLable);
+                EnigmaticGUILayout.Label(title, titleLable);
 
                 EnigmaticGUILayout.Space(buttonSpace);
 
@@ -56,7 +56,7 @@ namespace Enigmatic.Core.Editor
             EnigmaticGUILayout.BeginVertical(EnigmaticStyles.columnBackground, EnigmaticGUILayout.Width(width),
                 EnigmaticGUILayout.Height(height), EnigmaticGUILayout.Padding(0), EnigmaticGUILayout.ElementSpacing(elementSpacing));
 
-            EnigmaticGUILayout.GetActiveGrup().ApplyOptions(options);
+            EnigmaticGUILayout.GetActiveGroup().ApplyOptions(options);
         }
 
         public static void EndColum()
@@ -64,15 +64,24 @@ namespace Enigmatic.Core.Editor
             EnigmaticGUILayout.EndVertical();
         }
 
-        public static void BeginVerticalScrollViewByGrup(Vector2 scrollPosition, 
-            Vector2 offsetPosition, float elementSpacing, params EnigmaticGUILayoutOption[] options)
+        public static void BeginVerticalScrollViewByGroup(Vector2 scrollPosition, 
+            Vector2 offsetPosition, float elementSpacing = 0, RectOffset clip = null, params EnigmaticGUILayoutOption[] options)
         {
-            Rect rect = EnigmaticGUILayout.GetActiveGrup().Rect;
+            Rect rect = EnigmaticGUILayout.GetActiveGroup().Rect;
 
-            rect.y += offsetPosition.y;
             rect.x += offsetPosition.x;
-            rect.height -= offsetPosition.y;
+            rect.y += offsetPosition.y;
             rect.width -= offsetPosition.x - 1;
+            rect.height -= offsetPosition.y;
+
+            if(clip != null)
+            {
+                rect.x += clip.left;
+                rect.y += clip.top;
+
+                rect.width -= clip.left + clip.right;
+                rect.height -= clip.top + clip.bottom;
+            }
 
             EnigmaticGUILayout.BeginVerticalScrollView(rect, rect, scrollPosition, 
                 EnigmaticGUILayout.Padding(-1), EnigmaticGUILayout.ElementSpacing(elementSpacing));
@@ -80,14 +89,14 @@ namespace Enigmatic.Core.Editor
             EnigmaticGUILayout.Space(2);
         }
 
-        public static Vector2 EndVerticalScrollViewByGrup()
+        public static Vector2 EndVerticalScrollViewByGroup()
         {
             return EnigmaticGUILayout.EndScrollView(() => { EnigmaticGUIUtility.Repaint(); });
         }
 
         public static void DrawFileExportSettings(FileExportSettings settings, string extension)
         {
-            float width = EnigmaticGUILayout.GetActiveGrup().Rect.width;
+            float width = EnigmaticGUILayout.GetActiveGroup().Rect.width;
 
             EnigmaticGUILayout.BeginHorizontal(EnigmaticGUILayout.Width(width),
                 EnigmaticGUILayout.ExpandHeight(true), EnigmaticGUILayout.ElementSpacing(1),
@@ -98,7 +107,7 @@ namespace Enigmatic.Core.Editor
 
                 EnigmaticGUILayout.BeginDisabledGroup(true);
                 {
-                    EnigmaticGUILayout.Lable(extension);
+                    EnigmaticGUILayout.Label(extension);
                 }
                 EnigmaticGUILayout.EndDisabledGroup();
             }
@@ -109,7 +118,7 @@ namespace Enigmatic.Core.Editor
 
         public static void DrawSelectedPath(string path)
         {
-            float width = EnigmaticGUILayout.GetActiveGrup().Rect.width;
+            float width = EnigmaticGUILayout.GetActiveGroup().Rect.width;
 
             EnigmaticGUILayout.BeginHorizontal(EnigmaticGUILayout.Width(width),
                 EnigmaticGUILayout.ExpandHeight(true), EnigmaticGUILayout.Padding(0));

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Enigmatic.Core.Editor
 {
-    public static class GUIValueCasher
+    internal static class GUIValueCasher
     {
         private static Dictionary<int, object> sm_ValueCashed = new Dictionary<int, object>();
 
@@ -37,6 +37,14 @@ namespace Enigmatic.Core.Editor
             value = sm_ValueCashed[guid];
             sm_ValueCashed.Remove(guid);
             return true;
+        }
+
+        public static bool TryGetValue<T>(int guid, out T value)
+        {
+            bool result = TryGetValue(guid, out object valueObj);
+            value = (T)valueObj;
+
+            return result;
         }
 
         public static void Clear() => sm_ValueCashed.Clear();

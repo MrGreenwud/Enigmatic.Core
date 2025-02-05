@@ -29,7 +29,7 @@ namespace Enigmatic.Core.Editor
             if (EditorGUIUtility.GetObjectPickerControlID() != m_ControlID)
                 return;
 
-            if(Event.current.type == EventType.ExecuteCommand
+            if (Event.current.type == EventType.ExecuteCommand
                 && Event.current.commandName == "ObjectSelectorUpdated")
             {
                 T result = EditorGUIUtility.GetObjectPickerObject() as T;

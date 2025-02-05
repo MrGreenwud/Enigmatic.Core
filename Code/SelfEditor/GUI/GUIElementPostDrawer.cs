@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Enigmatic.Core.Editor
 {
-    public static class GUIElementPostDrawer
+    internal static class GUIElementPostDrawer
     {
         /// <summary>
         /// 0 - text, 1 - position, 2 - width, 2 - style
         /// </summary>
-        public static void Lable(object[] parameters)
+        public static void Label(object[] parameters)
         {
             if (parameters.Length < 4)
                 return;
@@ -77,6 +77,7 @@ namespace Enigmatic.Core.Editor
             string text = (string)parameters[1];
             GUIStyle style = parameters[2] as GUIStyle;
 
+            GUI.SetNextControlName(GUIgUID.Next("", rect, text).ToString());
             EnigmaticGUI.Button(text, rect.position, rect.size, style);
         }
 
@@ -93,6 +94,7 @@ namespace Enigmatic.Core.Editor
             float value = (float)parameters[2];
             string name = (string)parameters[3];
 
+            GUI.SetNextControlName(GUIgUID.Next(name, rect, "").ToString());
             float result = value;
 
             if (string.IsNullOrEmpty(name) == false)
@@ -119,6 +121,8 @@ namespace Enigmatic.Core.Editor
 
             int result = value;
 
+            GUI.SetNextControlName(GUIgUID.Next(name, rect, "").ToString());
+
             if (string.IsNullOrEmpty(name))
                 result = EnigmaticGUI.IntField(value, rect.position, rect.width);
             else
@@ -144,6 +148,8 @@ namespace Enigmatic.Core.Editor
 
             string newValue = value;
 
+            GUI.SetNextControlName(GUIgUID.Next(name, rect, "").ToString());
+
             if (string.IsNullOrEmpty(name))
                 newValue = EnigmaticGUI.TextField(newValue, rect.position, rect.width);
             else
@@ -154,19 +160,22 @@ namespace Enigmatic.Core.Editor
         }
 
         /// <summary>
-        /// 0 - GUIGrup, 1 - border
+        /// 0 - GUIGroup, 1 - border
         /// </summary>
-        public static void Grup(object[] parameters)
+        public static void Group(object[] parameters)
         {
             if (parameters.Length < 2)
                 return;
 
-            GUIGrup grup = parameters[0] as GUIGrup;
-            GUIStyle style = grup.Style;
+            GUIGroup group = parameters[0] as GUIGroup;
+            GUIStyle style = group.Style;
+            Color color = group.Color;
             int border = (int)parameters[1];
 
-            if (style != null)
-                EnigmaticGUI.Image(EnigmaticGUI.GetFixedBox(grup.Rect, border), style);
+            if (style != GUIStyle.none)
+                EnigmaticGUI.Image(EnigmaticGUI.GetFixedBox(group.Rect, border), style);
+            else if (color != Color.clear)
+                EnigmaticGUI.DrawRect(group.Rect, color);
         }
 
         /// <summary>

@@ -5,19 +5,19 @@ namespace Enigmatic.Core
 {
     public static class PostActionCallerPool
     {
-        private static Queue<PostActionCaller> sm_Callers = new Queue<PostActionCaller>();
+        private static Queue<DeferredActionCaller> sm_Callers = new Queue<DeferredActionCaller>();
 
-        public static PostActionCaller GetCaller(Action<object[]> action, params object[] parameters)
+        public static DeferredActionCaller GetCaller(Action<object[]> action, params object[] parameters)
         {
             if (sm_Callers.Count == 0)
-                sm_Callers.Enqueue(new PostActionCaller());
+                sm_Callers.Enqueue(new DeferredActionCaller());
 
-            PostActionCaller drawer = sm_Callers.Dequeue();
-            drawer.Init(parameters, action);
-            return drawer;
+            DeferredActionCaller caller = sm_Callers.Dequeue();
+            caller.Init(parameters, action);
+            return caller;
         }
 
-        public static void ReturnCaller(PostActionCaller caller)
+        public static void ReturnCaller(DeferredActionCaller caller)
         {
             if (sm_Callers.Count > 100)
                 return;
